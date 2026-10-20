@@ -1,0 +1,41 @@
+	
+	mkdir -p ~/docker/npm
+	cd ~/docker/npm
+	mkdir data
+	mkdir letsencrypt
+
+	sudo firewall-cmd --permanent --add-service=http
+	sudo firewall-cmd --permanent --add-service=https
+	sudo firewall-cmd --permanent --add-port=81/tcp
+	sudo firewall-cmd --reload
+
+maybe also (idk):
+	
+	sudo firewall-cmd --permanent --add-port=80/tcp
+	sudo firewall-cmd --permanent --add-port=443/tcp
+	sudo firewall-cmd --permanent --add-port=81/tcp
+	sudo firewall-cmd --reload
+	
+	
+after adding compose.yaml:
+
+open 192.168.178.53:81 in browser in local network
+create local account or log in if you have already
+
+click on "Proxy Host" in Dashboard
+click "Add Proxy Host"
+
+in "Details" :
+	enter Domain Name, should be <service>.<server_adress>, example: subdomain.my_server_domain.duckdns.org for domain my_domain.duckdns.org
+	Scheme: http
+	Forward Hostname/IP: ip of server in local network, example 192.168.1.18
+	Forward Port: Port of docker service, for navidrome 4533
+	enable "Block Common Exploits"
+	enable "Websockets Support"
+	
+in "SSL":
+	under "SSL Certificate" choose "Request a new Certificate"
+	agree to terms
+	enable Force SSL
+	enable HTTP/2 Support
+	enable HSTS Enabled

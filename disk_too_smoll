@@ -1,0 +1,3 @@
+incase only 16gb of bigger disk is available you can run this, however this is probably not the intended way:
+
+sudo lvextend -l +100%FREE -r /dev/my_server_name/root

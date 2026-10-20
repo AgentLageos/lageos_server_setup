@@ -1,0 +1,11 @@
+install java
+
+check java install:
+
+java -version
+
+add user only for mc:
+
+sudo useradd -r -m -d /opt/minecraft -s /sbin/nologin minecraft
+sudo mkdir -p /opt/minecraft/server
+sudo chown -R minecraft:minecraft /opt/minecraft

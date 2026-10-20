@@ -1,0 +1,30 @@
+INSTALLING DOCKER:
+	
+	sudo dnf install -y dnf-plugins-core
+	sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
+	sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+	sudo systemctl enable --now docker
+
+	systemctl status docker														(check status)
+
+ADDING USER TO DOCKER GROUP (so you don't need to type sudo when configuring docker)
+
+	sudo usermod -aG docker $USER		(maybe newgrp docker)
+	sudo reboot
+	
+	
+	docker ps				(check)
+	
+	
+STARTING CONTAINERS (has to be done inside the dir where compose.yaml is)
+	docker compose up -d						start container 				(-d stands for start in background so terminal won't be blocked)
+	docker compose down							stop container
+	
+
+
+
+
+
+
+AUTOSTART OF CONTAINERS HAS TO BE INSIDE compose.yaml

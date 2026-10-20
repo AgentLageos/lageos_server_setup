@@ -1,0 +1,71 @@
+installation:
+
+as root:
+
+	run:
+		sudo dnf install tigervnc-server
+		sudo dnf install @xfce-desktop-environment
+
+	create:
+		sudo vi /usr/lib/systemd/system/vncserver@.service
+	--> there paste:
+
+[Unit]
+Description=TigerVNC Server for %i
+After=network.target
+
+[Service]
+Type=forking
+User=%i
+PAMName=login
+PIDFile=/home/%i/.vnc/%H:%i.pid
+ExecStart=/usr/bin/vncserver :%I
+ExecStop=/usr/bin/vncserver -kill :%I
+
+[Install]
+WantedBy=multi-user.target
+
+
+as every user:
+	
+	run:
+		vncpasswd			(view-only-passwd can be left empty, if not desired)
+	
+	create:
+		mkdir -p ~/.vnc
+		vi xstartup
+	--> there paste:
+		unset SESSION_MANAGER
+		unset DBUS_SESSION_BUS_ADDRESS
+		export LIBGL_ALWAYS_SOFTWARE=1
+		export GALLIUM_DRIVER=llvmpipe
+		exec startxfce4
+
+	run:
+		chmod +x ~/.vnc/xstartup
+
+	edit/create:
+		sudo vi /etc/tigervnc/vncserver.users
+	(should look like this:
+		:1=alice
+		:2=bob
+		:3=charlie
+	)
+
+	run:
+		sudo systemctl enable vncserver@:1.service			(autostart vnc session on bootup, replace 1 with corresponding user number)
+		sudo systemctl start vncserver@:1.service			(start vnc session)
+	
+	check that port is open:
+		ss -tlnp | grep 5901						(would be 5902 for user 2)
+
+	check firewall for that port:
+		sudo firewall-cmd --list-ports
+
+	--> if the port is NOT listed:
+		sudo firewall-cmd --permanent --add-port=5901/tcp
+		sudo firewall-cmd --reload
+
+	
+			
+

@@ -1,0 +1,4 @@
+by default the desktop will be locked after 5 minutes, to disable this:
+
+top left "Applications" --> Settings --> Power Manager --> in System and Display put times to 'never' 
+click on "Screensaver Management" --> adjust Sleep time, Screensaver and disable Lock Screen

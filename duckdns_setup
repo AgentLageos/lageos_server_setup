@@ -1,0 +1,13 @@
+for more info visit:
+https://www.duckdns.org/install.jsp
+
+in desired dir run: 
+
+	vi duck.sh
+	--> echo url="https://www.duckdns.org/update?domains=ohm-server&token=7bb37dda-04b3-41cb-8536-a00f99dcc8fd" | curl -k -o ~/files/duckdns/duck.log -K -
+
+save, then:
+	
+	chmod 700 duck.sh
+	crontab -e
+	*/5 * * * * /home/benjamin/files/duckdns/duck.sh >/dev/null 2>&1

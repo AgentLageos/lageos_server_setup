@@ -1,0 +1,10 @@
+	
+
+	mkdir -p ~/docker/navidrome
+	cd ~/docker/navidrome
+	mkdir data
+	id
+	
+	
+	sudo firewall-cmd --permanent --add-port=4533/tcp
+	sudo firewall-cmd --reload

@@ -1,0 +1,72 @@
+installation:
+	
+	sudo dnf install wireguard-tools
+
+setup:
+	
+	sudo sysctl -w net.ipv4.ip_forward=1						(IP forwarding)
+	echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
+
+as root:
+
+	sudo mkdir -p /etc/wireguard
+	sudo chmod 700 /etc/wireguard
+
+	wg genkey | sudo tee /etc/wireguard/server_privatekey | wg pubkey | sudo tee /etc/wireguard/server_publickey			(generate keys for server)
+
+
+as user add clients:
+
+	wg genkey | tee client1_privatekey | wg pubkey > client1_publickey				(creates files with keys in current dir)
+
+
+inside /etc/wireguard/wg0.conf :
+
+
+
+[Interface]
+PrivateKey = SERVER_PRIVATE_KEY
+Address = 10.8.0.1/24
+ListenPort = 51820
+
+# Client 1
+[Peer]
+PublicKey = CLIENT1_PUBLIC_KEY
+AllowedIPs = 10.8.0.2/32
+
+# Client 2
+[Peer]
+PublicKey = CLIENT2_PUBLIC_KEY
+AllowedIPs = 10.8.0.3/32
+
+# Client 3
+[Peer]
+PublicKey = CLIENT3_PUBLIC_KEY
+AllowedIPs = 10.8.0.4/32
+
+
+
+firewall management:
+	sudo firewall-cmd --add-port=51820/udp --permanent
+	sudo firewall-cmd --zone=public --add-masquerade --permanent
+	sudo firewall-cmd --reload
+
+
+start: 
+	sudo wg-quick up wg0
+	sudo systemctl enable wg-quick@wg0
+	sudo wg show
+
+
+client config: 		(after changing clients rerun  wg-quick down und wg-quick up)
+
+[Interface]
+PrivateKey = CLIENT1_PRIVATE_KEY
+Address = 10.8.0.2/24
+
+
+[Peer]
+PublicKey = SERVER_PUBLIC_KEY
+Endpoint = my_server_domain.duckdns.org:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 25
